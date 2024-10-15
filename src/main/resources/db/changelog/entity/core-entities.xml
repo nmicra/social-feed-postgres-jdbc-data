@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="add_sequence" author="nmicra">
+        <createSequence sequenceName="SEQ_ORDERS" cycle="false" minValue="1" maxValue="9223372036854775807" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+
+    <changeSet id="post_entity" author="nmicra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="post"/>
+            </not>
+        </preConditions>
+        <createTable tableName="post">
+            <column name="id" type="bigint" defaultValueComputed="nextval('seq_orders')">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="creation_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post2user" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+       <!-- <addForeignKeyConstraint baseTableName="post"
+                                 baseColumnNames="post2user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_post_user"/>-->
+        <createIndex tableName="post" indexName="idx_post_post2user">
+            <column name="post2user"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="user_entity" author="nmicra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user">
+            <column name="id" type="bigint" defaultValueComputed="nextval('seq_orders')">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="creation_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="followers" type="bigint[]"/>
+            <column name="feed" type="bigint[]"/>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

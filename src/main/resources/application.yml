@@ -1,0 +1,16 @@
+spring:
+ application.name: social-net-feed
+ datasource:
+   username: myuser
+   password: secret
+   url: jdbc:postgresql://localhost/mydatabase
+ liquibase:
+   enabled: true
+   drop-first: false
+   change-log: classpath:db/changelog/master.xml
+   default-schema: public
+
+logging:
+  level:
+    root: info
+    org.springframework.data.jdbc: debug
